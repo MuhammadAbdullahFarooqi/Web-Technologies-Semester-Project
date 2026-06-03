@@ -1,0 +1,133 @@
+<div class="portal-container">
+  <header class="portal-header">
+    <div class="header-left">
+      <span class="header-logo">📖</span>
+      <div>
+        <h2>Ink & Lens</h2>
+        <span class="portal-badge badge-admin">Admin Portal</span>
+      </div>
+    </div>
+    <button class="btn btn-outline btn-sm" (click)="logout()">
+      Leave Portal
+    </button>
+  </header>
+
+  <main class="portal-content">
+    
+    <!-- Upload Section -->
+    <section class="admin-action-section glass">
+      <h2 class="section-title">Upload New Story</h2>
+      <p class="section-desc">Add a new book/story PDF details to the library collection database and server disk.</p>
+      
+      <form (submit)="uploadStory($event)" class="upload-form">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="title">Story Title</label>
+            <input 
+              type="text" 
+              id="title" 
+              [(ngModel)]="newStory.title" 
+              name="title" 
+              placeholder="e.g. The Old Library Secret" 
+              class="form-control"
+              required
+            />
+          </div>
+          
+          <div class="form-group flex-1">
+            <label for="file">PDF File Document</label>
+            <div class="file-picker-wrapper">
+              <input 
+                type="file" 
+                id="file" 
+                (change)="onFileSelected($event)" 
+                accept="application/pdf"
+                class="file-input-hidden"
+                #fileInput
+                required
+              />
+              <button type="button" class="btn btn-secondary btn-block file-picker-btn" (click)="fileInput.click()">
+                {{ selectedFile ? selectedFile.name : 'Select PDF File...' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Summary / Description</label>
+          <textarea 
+            id="description" 
+            [(ngModel)]="newStory.description" 
+            name="description" 
+            placeholder="Write a brief overview of the plot or theme..." 
+            class="form-control"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="form-footer">
+          <div class="status-msg" [class.success]="uploadStatus === 'success'" [class.error]="uploadStatus === 'error'">
+            {{ statusMessage }}
+          </div>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="uploading || !newStory.title || !selectedFile"
+          >
+            <span class="spinner spinner-inline" *ngIf="uploading"></span>
+            {{ uploading ? 'Publishing...' : 'Publish Story' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Catalog Management -->
+    <section class="catalog-section">
+      <h2 class="section-title">Manage Club Catalog</h2>
+
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="loading">
+        <div class="spinner"></div>
+        <p>Retrieving stories database list...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="!loading && stories.length === 0">
+        <span class="empty-icon">📭</span>
+        <h3>No Catalog Recorded</h3>
+        <p>Fill out the form above to post the very first library entry.</p>
+      </div>
+
+      <!-- Grid layout -->
+      <div class="stories-grid" *ngIf="!loading && stories.length > 0">
+        <div class="story-card glass" *ngFor="let story of stories">
+          <div class="story-card-header">
+            <span class="book-icon">📘</span>
+            <span class="story-date">{{ story.uploadDate }}</span>
+          </div>
+          <div class="story-card-body">
+            <h3 class="story-title">{{ story.title }}</h3>
+            <p class="story-description">{{ story.description || 'No description available for this story.' }}</p>
+          </div>
+          <div class="story-card-footer split-footer">
+            <button 
+              class="btn btn-outline btn-sm flex-1" 
+              (click)="downloadStory(story)"
+            >
+              📥 View PDF
+            </button>
+            <button 
+              class="btn btn-danger btn-sm flex-1" 
+              (click)="deleteStory(story.id)"
+              [disabled]="deletingId === story.id"
+            >
+              <span class="spinner spinner-inline" *ngIf="deletingId === story.id"></span>
+              {{ deletingId === story.id ? 'Deleting...' : 'Delete' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>

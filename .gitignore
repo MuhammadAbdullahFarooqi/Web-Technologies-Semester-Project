@@ -1,0 +1,56 @@
+# Absolute paths or patterns to exclude heavy folders and compile artifacts
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# decompiled files
+*.dhw
+
+# IDEs and Editors
+.vs/
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.docstates
+
+# Build folders
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+project-api/bin/
+project-api/obj/
+
+# Angular dependencies & builds
+node_modules/
+inkandlens/node_modules/
+inkandlens/.angular/
+inkandlens/dist/
+inkandlens/tmp/
+inkandlens/out-tsc/
+dist/
+wwwroot/index.html
+wwwroot/main*.js
+wwwroot/polyfills*.js
+wwwroot/runtime*.js
+wwwroot/styles*.css
+wwwroot/favicon.ico
+wwwroot/assets/
+
+# ZIP archives
+*.zip
+Complete Project Zip.zip
+
+# SQLite temporary files
+*.db-shm
+*.db-wal
+*.db-journal
